@@ -7,7 +7,7 @@ const initialColor = {
   code: { hex: "" }
 };
 
-const ColorList = ({ colors, updateColors }) => {
+const ColorList = ({ colors, updateColors, setIsFetching, isFetching }) => {
   console.log("colors", colors);
   const [editing, setEditing] = useState(false);
   const [colorToEdit, setColorToEdit] = useState(initialColor);
@@ -32,6 +32,7 @@ const ColorList = ({ colors, updateColors }) => {
     // where is is saved right now?
     axiosWithAuth()
       .put(`/colors/${colorToEdit.id}`, colorToEdit)
+    setIsFetching(!isFetching)
   }
 
   const deleteColor = color => {
@@ -39,6 +40,7 @@ const ColorList = ({ colors, updateColors }) => {
     axiosWithAuth()
       .delete(`/colors/${color.id}`)
     setEditing(false)
+    setIsFetching(!isFetching)
   };
 
   const handleColorChange = (e) => {
@@ -46,13 +48,12 @@ const ColorList = ({ colors, updateColors }) => {
   }
 
   const handleCodeChange = (e) => {
-    setNewColor({...newColor, code: {...newColor.code, hex: e.target.value}})
+    setNewColor({ ...newColor, code: { ...newColor.code, hex: e.target.value } })
   }
-
-  console.log("newcolor", newColor)
 
   const addSubmit = (e) => {
     e.preventDefault();
+    console.log("newColor", newColor)
     axiosWithAuth()
       .post('/colors', newColor)
       .then(res => {
@@ -67,7 +68,8 @@ const ColorList = ({ colors, updateColors }) => {
           }
         })
       })
-      .catch(err => console.log(err))
+      .catch(err => console.log("hello from the error place", err))
+    setIsFetching(!isFetching)
   }
 
   return (
@@ -123,7 +125,7 @@ const ColorList = ({ colors, updateColors }) => {
           </div>
         </form>
       )}
-            <form onSubmit={addSubmit}>
+      <form>
         <input
           name="color"
           placeholder="Color"
@@ -132,13 +134,13 @@ const ColorList = ({ colors, updateColors }) => {
           className="colorInput"
         />
         <input
-          name="code"
-          placeholder="Code"
+          name="hex"
+          placeholder="Hex Code"
           value={newColor.code.hex}
           onChange={handleCodeChange}
           className="colorInput"
         />
-        <button className="colorInput">Add Color</button>
+        <button onClick={addSubmit} className="colorInput">Add Color</button>
       </form>
       <div className="spacer" />
       {/* stretch - build another form here to add a color */}
