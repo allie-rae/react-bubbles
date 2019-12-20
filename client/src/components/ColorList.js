@@ -58,9 +58,7 @@ const ColorList = ({ colors, updateColors, setIsFetching, isFetching }) => {
       .post('/colors', newColor)
       .then(res => {
         console.log("newcolorsform res.data", res.data);
-        setNewColor({
-          newColor: res.data
-        })
+        updateColors(res.data)
         setNewColor({
           color: '',
           code: {
@@ -140,7 +138,7 @@ const ColorList = ({ colors, updateColors, setIsFetching, isFetching }) => {
           onChange={handleCodeChange}
           className="colorInput"
         />
-        <button onClick={addSubmit} className="colorInput">Add Color</button>
+        <button onClick={addSubmit} type="button" className="colorInput">Add Color</button>
       </form>
       <div className="spacer" />
       {/* stretch - build another form here to add a color */}
