@@ -8,7 +8,6 @@ const initialColor = {
 };
 
 const ColorList = ({ colors, updateColors, setIsFetching, isFetching }) => {
-  console.log("colors", colors);
   const [editing, setEditing] = useState(false);
   const [colorToEdit, setColorToEdit] = useState(initialColor);
   const [newColor, setNewColor] = useState({
@@ -22,8 +21,6 @@ const ColorList = ({ colors, updateColors, setIsFetching, isFetching }) => {
     setEditing(true);
     setColorToEdit(color);
   };
-
-  console.log("colorToEdit", colorToEdit)
 
   const saveEdit = e => {
     e.preventDefault();
@@ -53,11 +50,9 @@ const ColorList = ({ colors, updateColors, setIsFetching, isFetching }) => {
 
   const addSubmit = (e) => {
     e.preventDefault();
-    console.log("newColor", newColor)
     axiosWithAuth()
       .post('/colors', newColor)
       .then(res => {
-        console.log("newcolorsform res.data", res.data);
         updateColors(res.data)
         setNewColor({
           color: '',
